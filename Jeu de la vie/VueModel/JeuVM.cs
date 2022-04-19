@@ -13,6 +13,7 @@ namespace Jeu_de_la_vie.VueModel
 {
     internal class JeuVM : INotifyPropertyChanged
     {
+        //Attribut
         Grille grille = new Grille(10);
         Iteration iteration;
         List<Cellule> _lalisteCell;
@@ -34,6 +35,8 @@ namespace Jeu_de_la_vie.VueModel
         }
 
         #endregion
+        #region Propriété
+        //Le nombre d'itération entrer par l'utilisateur
         public int NombreIteration 
         { 
             get { return _NombreIteration; } 
@@ -41,6 +44,7 @@ namespace Jeu_de_la_vie.VueModel
                 ValeurChangee("NombreIteration");
             } 
         }
+        //La grille de cellule afficher dans l'interface
         public List<Cellule> ListeCellule
         {
             get { return _lalisteCell; }
@@ -50,6 +54,8 @@ namespace Jeu_de_la_vie.VueModel
                 ValeurChangee("ListeCellule");
             }
         }
+        #endregion
+
         #region Afficher formes
         #region Afficher forme 1
         private ICommand _AfficherFormeP;
@@ -139,11 +145,17 @@ namespace Jeu_de_la_vie.VueModel
         {
             for(int i = 0; i < NombreIteration; i++)
             {
+                //Va chercher la grille actuel
                 iteration.Grille = grille;
+                //Vérifie les cellules voisine vivante
                 grille.VérifierCellulesVivantes();
+                //Fait l'itération
                 iteration.FaireIteration();
+                //donne la nouvelle grille
                 grille  = iteration.Grille;
+                //change la liste de cellule à afficher
                 ListeCellule = grille.cellules;
+                //Prend 0,1 seconde avant d'afficher la prochaine itération
                 await Task.Delay(100);
             }
         }
@@ -154,20 +166,26 @@ namespace Jeu_de_la_vie.VueModel
         #endregion
 
 
+        /// <summary>
+        /// Constructeur du view model de Jeu
+        /// </summary>
         public JeuVM()
         {
+            //Crée l'objet iteration
             iteration = new Iteration(grille);
+
+            //bouton afficher les formes dans l'interface
             this.AfficherFormeP = new CommandeRelais(AfficherFormeP_Execute, AfficherFormeP_CanExecute);
             this.AfficherFormeD = new CommandeRelais(AfficherFormeD_Execute, AfficherFormeD_CanExecute);
             this.AfficherFormeT = new CommandeRelais(AfficherFormeT_Execute, AfficherFormeT_CanExecute);
             this.AfficherFormeA = new CommandeRelais(AfficherFormeA_Execute, AfficherFormeA_CanExecute);
+
+            //Lancer les itérations
             this.Demarrer = new CommandeRelais(Demarrer_Execute, Demarrer_CanExecute);
 
+            //Crée la liste de base et l'affiche.
             ListeCellule = new List<Cellule>();
             ListeCellule = grille.cellules;
-            //ListeCellule.Add(new Cellule(new Position(0, 0), true));
-            //ListeCellule.Add(new Cellule(new Position(0,1), false));
-            //ListeCellule.Add(new Cellule(new Position(1, 0), true));
         }
     }
 }

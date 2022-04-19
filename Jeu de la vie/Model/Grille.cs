@@ -8,15 +8,25 @@ namespace Jeu_de_la_vie.Model
 {
     internal class Grille
     {
+        //attribut
         public int grandeur { get; set; }
         public Cellule[,] laGrille;
         public List<Cellule> cellules;
+
+        /// <summary>
+        /// Constructeur de l'objet grille
+        /// </summary>
+        /// <param name="laGrandeur">La hauteur et la largeur que la grille prend</param>
         public Grille(int laGrandeur)
         {
             grandeur = laGrandeur;
             laGrille= CréerGrille();
         }
 
+        /// <summary>
+        /// Génère la grille et les cellules qu'elle contient, avec leur position et leur état de vie mort.
+        /// </summary>
+        /// <returns>La grille construite de base</returns>
         public Cellule[,] CréerGrille()
         {
             laGrille = new Cellule[grandeur, grandeur];
@@ -35,6 +45,9 @@ namespace Jeu_de_la_vie.Model
             return laGrille;
         }
 
+        /// <summary>
+        /// Changer l'état de vie des cellules, pour qu'elles soient morte
+        /// </summary>
         public void viderGrille()
         {
             foreach (Cellule cellule in laGrille)
@@ -42,6 +55,11 @@ namespace Jeu_de_la_vie.Model
                 cellule.EtatVie = false;
             }
         }
+
+        #region Généré les formes
+        /// <summary>
+        /// Temporaire modifier la grille pour lui donner la forme 1.
+        /// </summary>
         public void PremForm()
         {
             for(int i = 0; i < grandeur; i++)
@@ -52,6 +70,9 @@ namespace Jeu_de_la_vie.Model
                 laGrille[i, grandeur-1].EtatVie = true;
             }
         }
+        /// <summary>
+        /// Temporaire modifier la grille pour lui donner la forme 2.
+        /// </summary>
         public void DeuForm()
         {
             for (int i = 0; i < grandeur; i++)
@@ -66,6 +87,9 @@ namespace Jeu_de_la_vie.Model
                 laGrille[i, grandeur - 1].EtatVie = true;
             }
         }
+        /// <summary>
+        /// Temporaire modifier la grille pour lui donner la forme 3.
+        /// </summary>
         public void TroiForm()
         {
             laGrille[1, 1].EtatVie = true;
@@ -82,6 +106,9 @@ namespace Jeu_de_la_vie.Model
             laGrille[1, 3].EtatVie = true;
         }
 
+        /// <summary>
+        /// Généré une grille avec des cellules aléatoirement vivante 
+        /// </summary>
         public void randomForm() 
         {
             Random random = new Random();
@@ -93,11 +120,16 @@ namespace Jeu_de_la_vie.Model
                 laGrille[valeurX, valeurY].EtatVie = true;
             }
         }
+        #endregion
 
+        /// <summary>
+        /// Vérifie pour chacune des cellules le nombre de cellule de voisine vivante dépendament sa position dans la grille
+        /// </summary>
         public void VérifierCellulesVivantes()
         {
             foreach(Cellule cellule in laGrille)
             {
+                //Vérifie si la cellule est un coin
                 cellule.nbVivanteAuTour = 0;
                 if (cellule.Position.X == 0 && cellule.Position.Y == 0)
                 {
@@ -123,6 +155,7 @@ namespace Jeu_de_la_vie.Model
                     VerifierCG(cellule);
                     VerifierDHG(cellule);
                 }
+                //verifie si la cellule est un coté
                 else if(cellule.Position.X == 0 && cellule.Position.Y != 0 && cellule.Position.Y < grandeur -1)
                 {
                     VerifierH(cellule);
@@ -155,6 +188,7 @@ namespace Jeu_de_la_vie.Model
                     VerifierDBG(cellule);
                     VerifierB(cellule);
                 }
+                //Une cellule normal
                 else
                 {
                     VerifierCG(cellule);
@@ -170,67 +204,105 @@ namespace Jeu_de_la_vie.Model
             }
         }
 
-        #region Verifier
+        #region Verifier Voisine
+        /// <summary>
+        /// Vérifie Cellule voisine en diagonale-Bas-Droit
+        /// </summary>
+        /// <param name="cellule">La cellule à vérifier</param>
         void VerifierDBD(Cellule cellule)
         {
-            //Celui en diagonale Bas Droit
+            //Si l'état de vie de la voisine est vivante ajouter +1 au nombre de voisine vivante
             if (laGrille[cellule.Position.X + 1, cellule.Position.Y + 1].EtatVie)
             {
                 cellule.nbVivanteAuTour = cellule.nbVivanteAuTour + 1;
             }
         }
+
+        /// <summary>
+        /// Vérifie Cellule voisine en Bas
+        /// </summary>
+        /// <param name="cellule">La cellule à vérifier</param>
         void VerifierB(Cellule cellule)
         {
-            //Celui en Bas
+            //Si l'état de vie de la voisine est vivante ajouter +1 au nombre de voisine vivante
             if (laGrille[cellule.Position.X, cellule.Position.Y + 1].EtatVie)
             {
                 cellule.nbVivanteAuTour = cellule.nbVivanteAuTour + 1;
             }
         }
+
+        /// <summary>
+        /// Vérifie Cellule voisine en diagonale-Haut-Droit
+        /// </summary>
+        /// <param name="cellule">La cellule à vérifier</param>
         void VerifierDHD(Cellule cellule)
         {
-            //Celui en diagonale Haut Droit
+            //Si l'état de vie de la voisine est vivante ajouter +1 au nombre de voisine vivante
             if (laGrille[cellule.Position.X + 1, cellule.Position.Y - 1].EtatVie)
             {
                 cellule.nbVivanteAuTour = cellule.nbVivanteAuTour + 1;
             }
         }
+
+        /// <summary>
+        /// Vérifie Cellule voisine en haut
+        /// </summary>
+        /// <param name="cellule">La cellule à vérifier</param>
         void VerifierH(Cellule cellule)
         {
-            //Celui en haut
+            //Si l'état de vie de la voisine est vivante ajouter +1 au nombre de voisine vivante
             if (laGrille[cellule.Position.X, cellule.Position.Y - 1].EtatVie)
             {
                 cellule.nbVivanteAuTour = cellule.nbVivanteAuTour + 1;
             }
         }
+
+        /// <summary>
+        /// Vérifie Cellule voisine à Droite
+        /// </summary>
+        /// <param name="cellule">La cellule à vérifier</param>
         void VerifierCD(Cellule cellule)
         {
-            //Celui à coté Droit
+            //Si l'état de vie de la voisine est vivante ajouter +1 au nombre de voisine vivante
             if (laGrille[cellule.Position.X + 1, cellule.Position.Y].EtatVie)
             {
                 cellule.nbVivanteAuTour = cellule.nbVivanteAuTour + 1;
             }
         }
 
+        /// <summary>
+        /// Vérifie Cellule voisine à gauche
+        /// </summary>
+        /// <param name="cellule">La cellule à vérifier</param>
         void VerifierCG(Cellule cellule)
         {
-            //Celui à coté Gauche
+            //Si l'état de vie de la voisine est vivante ajouter +1 au nombre de voisine vivante
             if (laGrille[cellule.Position.X - 1, cellule.Position.Y].EtatVie)
             {
                 cellule.nbVivanteAuTour = cellule.nbVivanteAuTour + 1;
             }
         }
+
+        /// <summary>
+        /// Vérifie Cellule voisine en diagonale-Bas-Gauche
+        /// </summary>
+        /// <param name="cellule">La cellule à vérifier</param>
         void VerifierDBG(Cellule cellule)
         {
-            //Celui à diagonale bas Gauche
+            //Si l'état de vie de la voisine est vivante ajouter +1 au nombre de voisine vivante
             if (laGrille[cellule.Position.X - 1, cellule.Position.Y + 1].EtatVie)
             {
                 cellule.nbVivanteAuTour = cellule.nbVivanteAuTour + 1;
             }
         }
+
+        /// <summary>
+        /// Vérifie Cellule voisine en diagonale-Haut-Gauche
+        /// </summary>
+        /// <param name="cellule">La cellule à vérifier</param>
         void VerifierDHG(Cellule cellule)
         {
-            //Celui à diagonale haut Gauche
+            //Si l'état de vie de la voisine est vivante ajouter +1 au nombre de voisine vivante
             if (laGrille[cellule.Position.X - 1, cellule.Position.Y - 1].EtatVie)
             {
                 cellule.nbVivanteAuTour = cellule.nbVivanteAuTour + 1;

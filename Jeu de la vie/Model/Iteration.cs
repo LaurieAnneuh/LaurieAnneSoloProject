@@ -9,11 +9,19 @@ namespace Jeu_de_la_vie.Model
     internal class Iteration
     {
         public Grille Grille { get; set; }
+
+        /// <summary>
+        /// Constructeur d'itération
+        /// </summary>
+        /// <param name="grille">Grille utiliser</param>
         public Iteration(Grille grille)
         {
             Grille = grille;
         }
 
+        /// <summary>
+        /// Vérifie pour chaque cellule si son état de vie change dépendament du nombre de cellules voisines vivantes
+        /// </summary>
         public void FaireIteration()
         {
 
