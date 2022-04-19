@@ -1,0 +1,70 @@
+﻿<Window x:Class="Jeu_de_la_vie.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Jeu_de_la_vie"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+            <Canvas Margin="10" Height="402" Width="402">
+                <Border BorderThickness="1" BorderBrush="Black">
+                    <StackPanel>
+                        <Rectangle Width="19" Height="19" Fill="Red"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderThickness="1" BorderBrush="Black" Margin="20">
+                    <StackPanel>
+                        <Rectangle Width="19" Height="19" Fill="Red"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderThickness="1" BorderBrush="Black" Margin="60,380">
+                    <StackPanel>
+                        <Rectangle Width="19" Height="19" Fill="Red" Visibility="Hidden"/>
+                    </StackPanel>
+                </Border>
+                <Canvas.Background>
+                    <DrawingBrush  Viewport="0,0,20,20" ViewportUnits="Absolute" TileMode="Tile">
+                        <DrawingBrush.Drawing>
+                            <DrawingGroup>
+                                <GeometryDrawing Brush="White">
+                                    <GeometryDrawing.Geometry>
+                                        <RectangleGeometry Rect="0,0,1,1" />
+                                    </GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+                                <GeometryDrawing Geometry="M0,0 L1,0 1,0.1, 0,0.1Z " Brush="#CCCCFF" />
+                                <GeometryDrawing Geometry="M0,0 L0,1 0.1,1, 0.1,0Z" Brush="#CCCCFF" />
+                            </DrawingGroup>
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </Canvas.Background>
+            </Canvas>
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+            <GroupBox Header="Configuration" Margin="5">
+                <StackPanel>
+                    <Label Margin="5">Générer une forme:</Label>
+                    <Button Margin="5" Command="{Binding AfficherFormeP}">Forme 1</Button>
+                    <Button Margin="5" Command="{Binding AfficherFormeD}">Forme 2</Button>
+                    <Button Margin="5" Command="{Binding AfficherFormeT}">Forme 3</Button>
+                    <Button Margin="5" Command="{Binding AfficherFormeA}">Aléatoire</Button>
+
+                    <Label>Charger une forme</Label>
+                    <Button Margin="5">Charger</Button>
+                    <Label>Enregistrer une nouvelle forme</Label>
+                    <Button Margin="5">Enregistrer</Button>
+                </StackPanel>
+            </GroupBox>
+            <Label>Nombre Itération</Label>
+            <TextBox Margin="5" Text="{Binding NombreIteration}"></TextBox>
+            <Button Margin="5" Command="{Binding Demarrer}">Démarrer</Button>
+        </StackPanel>
+
+    </Grid>
+</Window>
