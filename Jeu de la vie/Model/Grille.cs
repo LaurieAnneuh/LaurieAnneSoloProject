@@ -10,6 +10,7 @@ namespace Jeu_de_la_vie.Model
     {
         public int grandeur { get; set; }
         public Cellule[,] laGrille;
+        public List<Cellule> cellules;
         public Grille(int laGrandeur)
         {
             grandeur = laGrandeur;
@@ -18,18 +19,29 @@ namespace Jeu_de_la_vie.Model
 
         public Cellule[,] CréerGrille()
         {
-            Cellule[,]  grille = new Cellule[grandeur, grandeur];
+            laGrille = new Cellule[grandeur, grandeur];
+            cellules = new List<Cellule>();
+            Cellule temp;
             for (int x = 0; x < grandeur; x++)
             {
                 for(int y = 0; y < grandeur; y++)
                 {
-                    grille[x, y] = new Cellule(new Position(x, y), false);
+                    temp = new Cellule(new Position(x, y), false);
+                    laGrille[x, y] = temp;
+                    cellules.Add(temp);
                 }
             }
 
-            return grille;
+            return laGrille;
         }
 
+        public void viderGrille()
+        {
+            foreach (Cellule cellule in laGrille)
+            {
+                cellule.EtatVie = false;
+            }
+        }
         public void PremForm()
         {
             for(int i = 0; i < grandeur; i++)
@@ -86,7 +98,8 @@ namespace Jeu_de_la_vie.Model
         {
             foreach(Cellule cellule in laGrille)
             {
-                if(cellule.Position.X == 0 && cellule.Position.Y == 0)
+                cellule.nbVivanteAuTour = 0;
+                if (cellule.Position.X == 0 && cellule.Position.Y == 0)
                 {
                     VerifierB(cellule);
                     VerifierCD(cellule);

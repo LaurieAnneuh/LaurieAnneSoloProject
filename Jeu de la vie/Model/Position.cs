@@ -10,11 +10,15 @@ namespace Jeu_de_la_vie.Model
     {
         public int X { get; private set; }
         public int Y { get; private set; }
+        public int XRelatif { get; private set; }
+        public int YRelatif { get; private set; }
 
         public Position(int x, int y)
         {
             X = x;
             Y = y;
+            XRelatif = X * 40;
+            YRelatif = Y * 40;
         }
     }
 }

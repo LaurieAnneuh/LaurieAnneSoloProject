@@ -7,13 +7,15 @@ using Jeu_de_la_vie.Model;
 using System.ComponentModel;
 using System.Windows.Input;
 using Jeu_de_la_vie.VueModel;
+using System.Threading;
 
 namespace Jeu_de_la_vie.VueModel
 {
-    internal class JeuVM
+    internal class JeuVM : INotifyPropertyChanged
     {
         Grille grille = new Grille(10);
         Iteration iteration;
+        List<Cellule> _lalisteCell;
         private int _NombreIteration = 1;
 
         #region Notification des changements aux propriétés
@@ -39,6 +41,15 @@ namespace Jeu_de_la_vie.VueModel
                 ValeurChangee("NombreIteration");
             } 
         }
+        public List<Cellule> ListeCellule
+        {
+            get { return _lalisteCell; }
+            set
+            {
+                _lalisteCell = new(value);
+                ValeurChangee("ListeCellule");
+            }
+        }
         #region Afficher formes
         #region Afficher forme 1
         private ICommand _AfficherFormeP;
@@ -49,7 +60,9 @@ namespace Jeu_de_la_vie.VueModel
         }
         private void AfficherFormeP_Execute(object sender)
         {
+            grille.viderGrille();
             grille.PremForm();
+            ListeCellule = grille.cellules;
         }
         private bool AfficherFormeP_CanExecute(object parameter)
         {
@@ -65,7 +78,9 @@ namespace Jeu_de_la_vie.VueModel
         }
         private void AfficherFormeD_Execute(object sender)
         {
+            grille.viderGrille();
             grille.DeuForm();
+            ListeCellule = grille.cellules;
         }
         private bool AfficherFormeD_CanExecute(object parameter)
         {
@@ -81,7 +96,9 @@ namespace Jeu_de_la_vie.VueModel
         }
         private void AfficherFormeT_Execute(object sender)
         {
+            grille.viderGrille();
             grille.TroiForm();
+            ListeCellule = grille.cellules;
         }
         private bool AfficherFormeT_CanExecute(object parameter)
         {
@@ -97,7 +114,9 @@ namespace Jeu_de_la_vie.VueModel
         }
         private void AfficherFormeA_Execute(object sender)
         {
+            grille.viderGrille();
             grille.randomForm();
+            ListeCellule = grille.cellules;
         }
         private bool AfficherFormeA_CanExecute(object parameter)
         {
@@ -116,12 +135,16 @@ namespace Jeu_de_la_vie.VueModel
             get { return _Demarrer; }
             set { _Demarrer = value; }
         }
-        private void Demarrer_Execute(object sender)
+        private async void Demarrer_Execute(object sender)
         {
             for(int i = 0; i < NombreIteration; i++)
             {
+                iteration.Grille = grille;
+                grille.VérifierCellulesVivantes();
                 iteration.FaireIteration();
                 grille  = iteration.Grille;
+                ListeCellule = grille.cellules;
+                await Task.Delay(100);
             }
         }
         private bool Demarrer_CanExecute(object parameter)
@@ -140,7 +163,11 @@ namespace Jeu_de_la_vie.VueModel
             this.AfficherFormeA = new CommandeRelais(AfficherFormeA_Execute, AfficherFormeA_CanExecute);
             this.Demarrer = new CommandeRelais(Demarrer_Execute, Demarrer_CanExecute);
 
-            grille.VérifierCellulesVivantes();
+            ListeCellule = new List<Cellule>();
+            ListeCellule = grille.cellules;
+            //ListeCellule.Add(new Cellule(new Position(0, 0), true));
+            //ListeCellule.Add(new Cellule(new Position(0,1), false));
+            //ListeCellule.Add(new Cellule(new Position(1, 0), true));
         }
     }
 }

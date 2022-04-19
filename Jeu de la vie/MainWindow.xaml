@@ -13,38 +13,29 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0">
-            <Canvas Margin="10" Height="402" Width="402">
-                <Border BorderThickness="1" BorderBrush="Black">
-                    <StackPanel>
-                        <Rectangle Width="19" Height="19" Fill="Red"/>
-                    </StackPanel>
-                </Border>
-                <Border BorderThickness="1" BorderBrush="Black" Margin="20">
-                    <StackPanel>
-                        <Rectangle Width="19" Height="19" Fill="Red"/>
-                    </StackPanel>
-                </Border>
-                <Border BorderThickness="1" BorderBrush="Black" Margin="60,380">
-                    <StackPanel>
-                        <Rectangle Width="19" Height="19" Fill="Red" Visibility="Hidden"/>
-                    </StackPanel>
-                </Border>
-                <Canvas.Background>
-                    <DrawingBrush  Viewport="0,0,20,20" ViewportUnits="Absolute" TileMode="Tile">
-                        <DrawingBrush.Drawing>
-                            <DrawingGroup>
-                                <GeometryDrawing Brush="White">
-                                    <GeometryDrawing.Geometry>
-                                        <RectangleGeometry Rect="0,0,1,1" />
-                                    </GeometryDrawing.Geometry>
-                                </GeometryDrawing>
-                                <GeometryDrawing Geometry="M0,0 L1,0 1,0.1, 0,0.1Z " Brush="#CCCCFF" />
-                                <GeometryDrawing Geometry="M0,0 L0,1 0.1,1, 0.1,0Z" Brush="#CCCCFF" />
-                            </DrawingGroup>
-                        </DrawingBrush.Drawing>
-                    </DrawingBrush>
-                </Canvas.Background>
-            </Canvas>
+            <Border Width="400" Height="400">
+                <ItemsControl ItemsSource="{Binding ListeCellule}" BorderThickness="1" BorderBrush="Black">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Background="Transparent"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Left" Value="{Binding Position.XRelatif}"/>
+                            <Setter Property="Canvas.Top" Value="{Binding Position.YRelatif}"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="Gray" BorderThickness="1">
+                                <Rectangle Width="40" Height="40" Fill="{Binding Couleur}" StrokeThickness="1">
+                                </Rectangle>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
         </StackPanel>
         <StackPanel Grid.Column="1">
             <GroupBox Header="Configuration" Margin="5">
@@ -62,7 +53,7 @@
                 </StackPanel>
             </GroupBox>
             <Label>Nombre Itération</Label>
-            <TextBox Margin="5" Text="{Binding NombreIteration}"></TextBox>
+            <TextBox Margin="5" Text="{Binding NombreIteration, Mode=TwoWay}"></TextBox>
             <Button Margin="5" Command="{Binding Demarrer}">Démarrer</Button>
         </StackPanel>
 
