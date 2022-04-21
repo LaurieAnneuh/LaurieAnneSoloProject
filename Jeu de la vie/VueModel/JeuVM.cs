@@ -137,14 +137,29 @@ namespace Jeu_de_la_vie.VueModel
         }
         private async void Demarrer_Execute(object sender)
         {
-            for(int i = 0; i < NombreIteration; i++)
+            if(NombreIteration != -1)
             {
-                iteration.Grille = grille;
-                grille.VérifierCellulesVivantes();
-                iteration.FaireIteration();
-                grille  = iteration.Grille;
-                ListeCellule = grille.cellules;
-                await Task.Delay(100);
+                for (int i = 0; i < NombreIteration; i++)
+                {
+                    iteration.Grille = grille;
+                    grille.VérifierCellulesVivantes();
+                    iteration.FaireIteration();
+                    grille = iteration.Grille;
+                    ListeCellule = grille.cellules;
+                    await Task.Delay(100);
+                }
+            }
+            else
+            {
+                for (;;)
+                {
+                    iteration.Grille = grille;
+                    grille.VérifierCellulesVivantes();
+                    iteration.FaireIteration();
+                    grille = iteration.Grille;
+                    ListeCellule = grille.cellules;
+                    await Task.Delay(100);
+                }
             }
         }
         private bool Demarrer_CanExecute(object parameter)
