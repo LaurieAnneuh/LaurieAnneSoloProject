@@ -152,6 +152,31 @@ namespace Jeu_de_la_vie.VueModel
         }
         #endregion
         #region EnregistrerForme
+        private ICommand _EnregistrerForme;
+        public ICommand EnregistrerForme
+        {
+            get { return _EnregistrerForme; }
+            set { _EnregistrerForme = value; }
+        }
+        private async void EnregistrerForme_Execute(object sender)
+        {
+            SaveFileDialog open = new SaveFileDialog();
+            open.Title = "Save File";
+            open.ShowDialog();
+            open.DefaultExt = "txt";
+            open.CheckFileExists = true;
+            open.CheckPathExists = true;
+            open.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (open.FileName != "")
+            {
+                gererFichierTexte.Enregistrer(grille, open.FileName);
+                ListeCellule = grille.cellules;
+            }
+        }
+        private bool EnregistrerForme_CanExecute(object parameter)
+        {
+            return true;
+        }
         #endregion
         #region Demarrer
         private ICommand _Demarrer;
@@ -203,6 +228,7 @@ namespace Jeu_de_la_vie.VueModel
             this.AfficherFormeA = new CommandeRelais(AfficherFormeA_Execute, AfficherFormeA_CanExecute);
             this.Demarrer = new CommandeRelais(Demarrer_Execute, Demarrer_CanExecute);
             this.ChargerForme = new CommandeRelais(ChargerForme_Execute, ChargerForme_CanExecute);
+            this.EnregistrerForme = new CommandeRelais(EnregistrerForme_Execute, EnregistrerForme_CanExecute);
 
             ListeCellule = new List<Cellule>();
             ListeCellule = grille.cellules;

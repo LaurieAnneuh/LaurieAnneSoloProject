@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Jeu_de_la_vie"
+        xmlns:local="clr-namespace:Jeu_de_la_vie" xmlns:behaviours="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
@@ -30,6 +30,11 @@
                         <DataTemplate>
                             <Border BorderBrush="Gray" BorderThickness="1">
                                 <Rectangle Width="20" Height="20" Fill="{Binding Couleur}" StrokeThickness="1">
+                                    <behaviours:Interaction.Triggers>
+                                        <behaviours:EventTrigger EventName="MouseDown">
+                                            <behaviours:InvokeCommandAction Command="{Binding Selectionner}" PassEventArgsToCommand="True"/>
+                                        </behaviours:EventTrigger>
+                                    </behaviours:Interaction.Triggers>
                                 </Rectangle>
                             </Border>
                         </DataTemplate>
@@ -49,7 +54,7 @@
                     <Label>Charger une forme</Label>
                     <Button Margin="5" Command="{Binding ChargerForme}">Charger</Button>
                     <Label>Enregistrer une nouvelle forme</Label>
-                    <Button Margin="5">Enregistrer</Button>
+                    <Button Margin="5" Command="{Binding EnregistrerForme}">Enregistrer</Button>
                 </StackPanel>
             </GroupBox>
             <Label>Nombre Itération</Label>

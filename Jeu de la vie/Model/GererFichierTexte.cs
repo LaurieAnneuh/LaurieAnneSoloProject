@@ -9,12 +9,12 @@ namespace Jeu_de_la_vie.Model
 {
     class GererFichierTexte
     {
-        public void Enregistrer(Grille grille)
+        public void Enregistrer(Grille grille, string nomFichier)
         {
             try
             {
                 //Pass the filepath and filename to the StreamWriter Constructor
-                StreamWriter sw = new StreamWriter("../../../../Forme2.txt");
+                StreamWriter sw = new StreamWriter(nomFichier);
                 
                 for(int i = 0; i < grille.grandeur; i++)
                 {
