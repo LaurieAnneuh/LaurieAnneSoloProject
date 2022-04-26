@@ -13,7 +13,7 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0">
-            <Border Width="400" Height="400">
+            <Border Width="404" Height="404">
                 <ItemsControl ItemsSource="{Binding ListeCellule}" BorderThickness="1" BorderBrush="Black">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -29,7 +29,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="Gray" BorderThickness="1">
-                                <Rectangle Width="40" Height="40" Fill="{Binding Couleur}" StrokeThickness="1">
+                                <Rectangle Width="20" Height="20" Fill="{Binding Couleur}" StrokeThickness="1">
                                 </Rectangle>
                             </Border>
                         </DataTemplate>
@@ -47,7 +47,7 @@
                     <Button Margin="5" Command="{Binding AfficherFormeA}">Aléatoire</Button>
 
                     <Label>Charger une forme</Label>
-                    <Button Margin="5">Charger</Button>
+                    <Button Margin="5" Command="{Binding ChargerForme}">Charger</Button>
                     <Label>Enregistrer une nouvelle forme</Label>
                     <Button Margin="5">Enregistrer</Button>
                 </StackPanel>

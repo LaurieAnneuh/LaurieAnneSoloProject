@@ -8,16 +8,17 @@ using System.ComponentModel;
 using System.Windows.Input;
 using Jeu_de_la_vie.VueModel;
 using System.Threading;
+using Microsoft.Win32;
 
 namespace Jeu_de_la_vie.VueModel
 {
     internal class JeuVM : INotifyPropertyChanged
     {
-        //Attribut
-        Grille grille = new Grille(10);
+        Grille grille = new Grille(20);
         Iteration iteration;
         List<Cellule> _lalisteCell;
         private int _NombreIteration = 1;
+        GererFichierTexte gererFichierTexte;
 
         #region Notification des changements aux propriétés
         public event PropertyChangedEventHandler PropertyChanged;
@@ -35,8 +36,6 @@ namespace Jeu_de_la_vie.VueModel
         }
 
         #endregion
-        #region Propriété
-        //Le nombre d'itération entrer par l'utilisateur
         public int NombreIteration 
         { 
             get { return _NombreIteration; } 
@@ -44,7 +43,6 @@ namespace Jeu_de_la_vie.VueModel
                 ValeurChangee("NombreIteration");
             } 
         }
-        //La grille de cellule afficher dans l'interface
         public List<Cellule> ListeCellule
         {
             get { return _lalisteCell; }
@@ -54,8 +52,6 @@ namespace Jeu_de_la_vie.VueModel
                 ValeurChangee("ListeCellule");
             }
         }
-        #endregion
-
         #region Afficher formes
         #region Afficher forme 1
         private ICommand _AfficherFormeP;
@@ -67,7 +63,8 @@ namespace Jeu_de_la_vie.VueModel
         private void AfficherFormeP_Execute(object sender)
         {
             grille.viderGrille();
-            grille.PremForm();
+            //grille.PremForm();
+            grille = gererFichierTexte.Lire("Forme1");
             ListeCellule = grille.cellules;
         }
         private bool AfficherFormeP_CanExecute(object parameter)
@@ -85,7 +82,8 @@ namespace Jeu_de_la_vie.VueModel
         private void AfficherFormeD_Execute(object sender)
         {
             grille.viderGrille();
-            grille.DeuForm();
+            //grille.DeuForm();
+            grille = gererFichierTexte.Lire("Forme2");
             ListeCellule = grille.cellules;
         }
         private bool AfficherFormeD_CanExecute(object parameter)
@@ -103,7 +101,7 @@ namespace Jeu_de_la_vie.VueModel
         private void AfficherFormeT_Execute(object sender)
         {
             grille.viderGrille();
-            grille.TroiForm();
+            grille = gererFichierTexte.Lire("Forme3");
             ListeCellule = grille.cellules;
         }
         private bool AfficherFormeT_CanExecute(object parameter)
@@ -131,6 +129,27 @@ namespace Jeu_de_la_vie.VueModel
         #endregion
         #endregion
         #region ChargerForme
+        private ICommand _ChargerForme;
+        public ICommand ChargerForme
+        {
+            get { return _ChargerForme; }
+            set { _ChargerForme = value; }
+        }
+        private async void ChargerForme_Execute(object sender)
+        {
+            OpenFileDialog open = new OpenFileDialog();
+            open.Title = "Select File";
+            open.ShowDialog();
+            if(open.FileName != "")
+            {
+                grille = gererFichierTexte.LireExterne(open.FileName);
+                ListeCellule = grille.cellules;
+            }
+        }
+        private bool ChargerForme_CanExecute(object parameter)
+        {
+            return true;
+        }
         #endregion
         #region EnregistrerForme
         #endregion
@@ -143,20 +162,29 @@ namespace Jeu_de_la_vie.VueModel
         }
         private async void Demarrer_Execute(object sender)
         {
-            for(int i = 0; i < NombreIteration; i++)
+            if(NombreIteration != -1)
             {
-                //Va chercher la grille actuel
-                iteration.Grille = grille;
-                //Vérifie les cellules voisine vivante
-                grille.VérifierCellulesVivantes();
-                //Fait l'itération
-                iteration.FaireIteration();
-                //donne la nouvelle grille
-                grille  = iteration.Grille;
-                //change la liste de cellule à afficher
-                ListeCellule = grille.cellules;
-                //Prend 0,1 seconde avant d'afficher la prochaine itération
-                await Task.Delay(100);
+                for (int i = 0; i < NombreIteration; i++)
+                {
+                    iteration.Grille = grille;
+                    grille.VérifierCellulesVivantes();
+                    iteration.FaireIteration();
+                    grille = iteration.Grille;
+                    ListeCellule = grille.cellules;
+                    await Task.Delay(100);
+                }
+            }
+            else
+            {
+                for (;;)
+                {
+                    iteration.Grille = grille;
+                    grille.VérifierCellulesVivantes();
+                    iteration.FaireIteration();
+                    grille = iteration.Grille;
+                    ListeCellule = grille.cellules;
+                    await Task.Delay(100);
+                }
             }
         }
         private bool Demarrer_CanExecute(object parameter)
@@ -166,26 +194,24 @@ namespace Jeu_de_la_vie.VueModel
         #endregion
 
 
-        /// <summary>
-        /// Constructeur du view model de Jeu
-        /// </summary>
         public JeuVM()
         {
-            //Crée l'objet iteration
             iteration = new Iteration(grille);
-
-            //bouton afficher les formes dans l'interface
             this.AfficherFormeP = new CommandeRelais(AfficherFormeP_Execute, AfficherFormeP_CanExecute);
             this.AfficherFormeD = new CommandeRelais(AfficherFormeD_Execute, AfficherFormeD_CanExecute);
             this.AfficherFormeT = new CommandeRelais(AfficherFormeT_Execute, AfficherFormeT_CanExecute);
             this.AfficherFormeA = new CommandeRelais(AfficherFormeA_Execute, AfficherFormeA_CanExecute);
-
-            //Lancer les itérations
             this.Demarrer = new CommandeRelais(Demarrer_Execute, Demarrer_CanExecute);
+            this.ChargerForme = new CommandeRelais(ChargerForme_Execute, ChargerForme_CanExecute);
 
-            //Crée la liste de base et l'affiche.
             ListeCellule = new List<Cellule>();
             ListeCellule = grille.cellules;
+            //ListeCellule.Add(new Cellule(new Position(0, 0), true));
+            //ListeCellule.Add(new Cellule(new Position(0,1), false));
+            //ListeCellule.Add(new Cellule(new Position(1, 0), true));
+            gererFichierTexte = new GererFichierTexte();
+
+            
         }
     }
 }
