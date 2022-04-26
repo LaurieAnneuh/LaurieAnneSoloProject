@@ -130,6 +130,10 @@ namespace Jeu_de_la_vie.VueModel
         #endregion
         #region ChargerForme
         private ICommand _ChargerForme;
+
+        /// <summary>
+        /// Bouton Charger un fichier externe
+        /// </summary>
         public ICommand ChargerForme
         {
             get { return _ChargerForme; }
@@ -137,12 +141,15 @@ namespace Jeu_de_la_vie.VueModel
         }
         private async void ChargerForme_Execute(object sender)
         {
+            //ouvre la fenetre
             OpenFileDialog open = new OpenFileDialog();
             open.Title = "Select File";
             open.ShowDialog();
             if(open.FileName != "")
             {
+                //lit le fichier 
                 grille = gererFichierTexte.LireExterne(open.FileName);
+                //Modifie l'affichage de la grille visible
                 ListeCellule = grille.cellules;
             }
         }
@@ -153,6 +160,9 @@ namespace Jeu_de_la_vie.VueModel
         #endregion
         #region EnregistrerForme
         private ICommand _EnregistrerForme;
+        /// <summary>
+        /// Bouton enregistrer la grille actuel sur un fichier externe
+        /// </summary>
         public ICommand EnregistrerForme
         {
             get { return _EnregistrerForme; }
