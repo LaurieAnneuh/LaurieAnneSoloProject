@@ -9,19 +9,27 @@ namespace Jeu_de_la_vie.Model
 {
     class GererFichierTexte
     {
+        /// <summary>
+        /// Enregistre la grille dans le fichier
+        /// </summary>
+        /// <param name="grille">La grille à enregistrer</param>
+        /// <param name="nomFichier">Le fichier dans le quel la grille sera sauvegarder</param>
         public void Enregistrer(Grille grille, string nomFichier)
         {
             try
             {
-                //Pass the filepath and filename to the StreamWriter Constructor
+                //Envoie le chemain au constructeur
                 StreamWriter sw = new StreamWriter(nomFichier);
                 
+                //Format d'enregistrement
                 for(int i = 0; i < grille.grandeur; i++)
                 {
                     for(int j=0; j < grille.grandeur; j++)
                     {
+                        //Espace entre chaque enregistrement d'une colone
                         sw.Write(grille.laGrille[i, j].EtatVie + " ");
                     }
+                    //Entrer à chaque enregistrement de ligne
                     sw.Write("\r");
                 }
 
@@ -34,20 +42,27 @@ namespace Jeu_de_la_vie.Model
             }
         }
 
+        /// <summary>
+        /// Charger/Lire un fichier d'une forme pré-enregistrer
+        /// </summary>
+        /// <param name="nomFichier">le nom du fichier à lire</param>
+        /// <returns>la grille résultante</returns>
         public Grille Lire(string nomFichier)
         {
             string line;
             Grille grille = new Grille(20);
             try
             {
-                //Pass the file path and file name to the StreamReader constructor
+                //Envoie le chemin du fichier au constructeur 
                 StreamReader sr = new StreamReader("../../../../" + nomFichier + ".txt");
                 string[] cellules;
-                //Read the first line of text
+                //Lit chaque ligne
                 for(int i = 0; i < 20; i++)
                 {
                     line = sr.ReadLine().Trim();
+                    //Sépare la ligne en cellule à chaque colone
                     cellules = line.Split(" ");
+                    //Ajoute la cellule dans la grille
                     for (int j = 0; j < cellules.Count(); j++)
                     {
                         grille.laGrille[i, j].EtatVie = Convert.ToBoolean(cellules[j]);
@@ -67,20 +82,27 @@ namespace Jeu_de_la_vie.Model
 
         }
 
+        /// <summary>
+        /// Charger/Lire un fichier d'une forme enregistrer par l'utilisateur (à partir de n'importe où dans le pc)
+        /// </summary>
+        /// <param name="nomFichier">le chemin du fichier à lire</param>
+        /// <returns>la grille résultante</returns>
         public Grille LireExterne(string nomFichier)
         {
             string line;
             Grille grille = new Grille(20);
             try
             {
-                //Pass the file path and file name to the StreamReader constructor
+                //Envoie le chemin du fichier au constructeur 
                 StreamReader sr = new StreamReader(nomFichier);
                 string[] cellules;
-                //Read the first line of text
+                //Lit chaque ligne
                 for (int i = 0; i < 20; i++)
                 {
                     line = sr.ReadLine().Trim();
+                    //Sépare la ligne en cellule à chaque colone
                     cellules = line.Split(" ");
+                    //Ajoute la cellule dans la grille
                     for (int j = 0; j < cellules.Count(); j++)
                     {
                         grille.laGrille[i, j].EtatVie = Convert.ToBoolean(cellules[j]);

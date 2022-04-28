@@ -8,16 +8,27 @@ namespace Jeu_de_la_vie.Model
 {
     internal class Grille
     {
+        #region Attribut
         public int grandeur { get; set; }
         public Cellule[,] laGrille;
         public List<Cellule> cellules;
         GererFichierTexte gererFichierTexte;
+        #endregion
+
+        /// <summary>
+        /// Constructeur de Grille
+        /// </summary>
+        /// <param name="laGrandeur">la grandeur de la grille à généré</param>
         public Grille(int laGrandeur)
         {
             grandeur = laGrandeur;
             laGrille= CréerGrille();
         }
 
+        /// <summary>
+        /// Crée l'array de la grille
+        /// </summary>
+        /// <returns>une array de cellule </returns>
         public Cellule[,] CréerGrille()
         {
             laGrille = new Cellule[grandeur, grandeur];
@@ -36,6 +47,9 @@ namespace Jeu_de_la_vie.Model
             return laGrille;
         }
 
+        /// <summary>
+        /// Met toute les cellules en état de vie false (mort)
+        /// </summary>
         public void viderGrille()
         {
             foreach (Cellule cellule in laGrille)
@@ -44,22 +58,35 @@ namespace Jeu_de_la_vie.Model
             }
         }
 
+        /// <summary>
+        /// Génère une grille aléatoire
+        /// </summary>
         public void randomForm() 
         {
             Random random = new Random();
+            //d'après le nombre maximum de cellule
             int nombre = random.Next(grandeur*grandeur);
+
+            //d'après une position aléatoire
             for(int i = 0; i < nombre; i++)
             {
                 int valeurX = random.Next(grandeur);
                 int valeurY = random.Next(grandeur);
-                laGrille[valeurX, valeurY].EtatVie = true;
+                laGrille[valeurX, valeurY].EtatVie = true; // elle devient vivante
             }
         }
 
+        /// <summary>
+        /// Vérifie d'après sa position dans la grille le nombre de voisine vivante
+        /// Elle ajoute au compteur dans la cellule pour chaque cellule
+        /// </summary>
         public void VérifierCellulesVivantes()
         {
             foreach(Cellule cellule in laGrille)
             {
+
+                //S'il s'agit d'un coin de la grille, 
+                //elle aura maximum 3 voisine
                 cellule.nbVivanteAuTour = 0;
                 if (cellule.Position.X == 0 && cellule.Position.Y == 0)
                 {
@@ -85,7 +112,10 @@ namespace Jeu_de_la_vie.Model
                     VerifierCG(cellule);
                     VerifierDHG(cellule);
                 }
-                else if(cellule.Position.X == 0 && cellule.Position.Y != 0 && cellule.Position.Y < grandeur -1)
+
+                //S'il s'agit d'un côté de la grille, 
+                //elle aura maximum 5 voisine
+                else if (cellule.Position.X == 0 && cellule.Position.Y != 0 && cellule.Position.Y < grandeur -1)
                 {
                     VerifierH(cellule);
                     VerifierDHD(cellule);
@@ -117,6 +147,9 @@ namespace Jeu_de_la_vie.Model
                     VerifierDBG(cellule);
                     VerifierB(cellule);
                 }
+
+                //S'il s'agit ni d'un coin, ni d'un côté de la grille, 
+                //elle aura maximum 8 voisine
                 else
                 {
                     VerifierCG(cellule);
@@ -133,6 +166,10 @@ namespace Jeu_de_la_vie.Model
         }
 
         #region Verifier
+        /// <summary>
+        /// Vérifie la cellule voisine de en diagonale bas droite
+        /// </summary>
+        /// <param name="cellule">la cellule d'un la voisine est vérifier</param>
         void VerifierDBD(Cellule cellule)
         {
             //Celui en diagonale Bas Droit
@@ -141,6 +178,10 @@ namespace Jeu_de_la_vie.Model
                 cellule.nbVivanteAuTour = cellule.nbVivanteAuTour + 1;
             }
         }
+        /// <summary>
+        /// Vérifie la cellule voisine de en bas
+        /// </summary>
+        /// <param name="cellule">la cellule d'un la voisine est vérifier</param>
         void VerifierB(Cellule cellule)
         {
             //Celui en Bas
@@ -149,6 +190,11 @@ namespace Jeu_de_la_vie.Model
                 cellule.nbVivanteAuTour = cellule.nbVivanteAuTour + 1;
             }
         }
+
+        /// <summary>
+        /// Vérifie la cellule voisine de en diagonale haut droite
+        /// </summary>
+        /// <param name="cellule">la cellule d'un la voisine est vérifier</param>
         void VerifierDHD(Cellule cellule)
         {
             //Celui en diagonale Haut Droit
@@ -157,6 +203,11 @@ namespace Jeu_de_la_vie.Model
                 cellule.nbVivanteAuTour = cellule.nbVivanteAuTour + 1;
             }
         }
+
+        /// <summary>
+        /// Vérifie la cellule voisine en haut
+        /// </summary>
+        /// <param name="cellule">la cellule d'un la voisine est vérifier</param>
         void VerifierH(Cellule cellule)
         {
             //Celui en haut
@@ -165,6 +216,11 @@ namespace Jeu_de_la_vie.Model
                 cellule.nbVivanteAuTour = cellule.nbVivanteAuTour + 1;
             }
         }
+
+        /// <summary>
+        /// Vérifie la cellule voisine de droit
+        /// </summary>
+        /// <param name="cellule">la cellule d'un la voisine est vérifier</param>
         void VerifierCD(Cellule cellule)
         {
             //Celui à coté Droit
@@ -174,6 +230,10 @@ namespace Jeu_de_la_vie.Model
             }
         }
 
+        /// <summary>
+        /// Vérifie la cellule voisine de gauche
+        /// </summary>
+        /// <param name="cellule">la cellule d'un la voisine est vérifier</param>
         void VerifierCG(Cellule cellule)
         {
             //Celui à coté Gauche
@@ -182,6 +242,11 @@ namespace Jeu_de_la_vie.Model
                 cellule.nbVivanteAuTour = cellule.nbVivanteAuTour + 1;
             }
         }
+
+        /// <summary>
+        /// Vérifie la cellule voisine de en diagonale bas gauche
+        /// </summary>
+        /// <param name="cellule">la cellule d'un la voisine est vérifier</param>
         void VerifierDBG(Cellule cellule)
         {
             //Celui à diagonale bas Gauche
@@ -190,6 +255,11 @@ namespace Jeu_de_la_vie.Model
                 cellule.nbVivanteAuTour = cellule.nbVivanteAuTour + 1;
             }
         }
+
+        /// <summary>
+        /// Vérifie la cellule voisine de en diagonale haut gauche
+        /// </summary>
+        /// <param name="cellule">la cellule d'un la voisine est vérifier</param>
         void VerifierDHG(Cellule cellule)
         {
             //Celui à diagonale haut Gauche
