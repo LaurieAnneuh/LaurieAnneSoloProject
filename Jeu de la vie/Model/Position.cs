@@ -8,8 +8,11 @@ namespace Jeu_de_la_vie.Model
 {
     internal class Position
     {
+        //Position dans la grille
         public int X { get; set; }
         public int Y { get; set; }
+
+        //Position dans la grille afficher
         public int XRelatif { get; private set; }
         public int YRelatif { get; private set; }
 
@@ -17,6 +20,7 @@ namespace Jeu_de_la_vie.Model
         {
             X = x;
             Y = y;
+            //placé d'après sa position dans la grille et la grandeur des cellules
             XRelatif = X * 20;
             YRelatif = Y * 20;
         }

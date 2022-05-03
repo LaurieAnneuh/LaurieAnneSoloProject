@@ -14,11 +14,13 @@ namespace Jeu_de_la_vie.VueModel
 {
     internal class JeuVM : INotifyPropertyChanged
     {
-        Grille grille = new Grille(20);
+        #region Attribut 
+        Grille grille;
         Iteration iteration;
         List<Cellule> _lalisteCell;
         private int _NombreIteration = 1;
         GererFichierTexte gererFichierTexte;
+        #endregion
 
         #region Notification des changements aux propriétés
         public event PropertyChangedEventHandler PropertyChanged;
@@ -36,6 +38,10 @@ namespace Jeu_de_la_vie.VueModel
         }
 
         #endregion
+
+        /// <summary>
+        /// Propriété du nombre d'itération voulue
+        /// </summary>
         public int NombreIteration 
         { 
             get { return _NombreIteration; } 
@@ -43,6 +49,10 @@ namespace Jeu_de_la_vie.VueModel
                 ValeurChangee("NombreIteration");
             } 
         }
+
+        /// <summary>
+        /// La liste de cellule afficher
+        /// </summary>
         public List<Cellule> ListeCellule
         {
             get { return _lalisteCell; }
@@ -54,6 +64,9 @@ namespace Jeu_de_la_vie.VueModel
         }
         #region Afficher formes
         #region Afficher forme 1
+        /// <summary>
+        /// Bouton qui affiche la première forme enregistrer
+        /// </summary>
         private ICommand _AfficherFormeP;
         public ICommand AfficherFormeP
         {
@@ -62,9 +75,14 @@ namespace Jeu_de_la_vie.VueModel
         }
         private void AfficherFormeP_Execute(object sender)
         {
+            //Vide la grille actuelle
             grille.viderGrille();
             //grille.PremForm();
+
+            //Lit le fichier de la forme 1
             grille = gererFichierTexte.Lire("Forme1");
+
+            //Met à jour la liste de cellule afficher
             ListeCellule = grille.cellules;
         }
         private bool AfficherFormeP_CanExecute(object parameter)
@@ -73,6 +91,9 @@ namespace Jeu_de_la_vie.VueModel
         }
         #endregion
         #region Afficher Forme 2 
+        /// <summary>
+        /// Bouton qui affiche la deuxième forme enregistrer
+        /// </summary>
         private ICommand _AfficherFormeD;
         public ICommand AfficherFormeD
         {
@@ -81,9 +102,16 @@ namespace Jeu_de_la_vie.VueModel
         }
         private void AfficherFormeD_Execute(object sender)
         {
+            //vide la grille
             grille.viderGrille();
+
+            //Fonction de base
             //grille.DeuForm();
+
+            //Lis le fichier à afficher
             grille = gererFichierTexte.Lire("Forme2");
+
+            //Met à jour la liste de cellule afficher
             ListeCellule = grille.cellules;
         }
         private bool AfficherFormeD_CanExecute(object parameter)
@@ -92,6 +120,9 @@ namespace Jeu_de_la_vie.VueModel
         }
         #endregion
         #region Afficher forme 3
+        /// <summary>
+        /// Bouton qui affiche la troisième forme enregistrer
+        /// </summary>
         private ICommand _AfficherFormeT;
         public ICommand AfficherFormeT
         {
@@ -100,8 +131,13 @@ namespace Jeu_de_la_vie.VueModel
         }
         private void AfficherFormeT_Execute(object sender)
         {
+            //Vide la grille actuelle
             grille.viderGrille();
+
+            //Lit le fichier de la forme 3
             grille = gererFichierTexte.Lire("Forme3");
+
+            //Met à jour la liste de cellule afficher
             ListeCellule = grille.cellules;
         }
         private bool AfficherFormeT_CanExecute(object parameter)
@@ -110,6 +146,9 @@ namespace Jeu_de_la_vie.VueModel
         }
         #endregion
         #region Afficher forme Aléatoire
+        /// <summary>
+        /// Bouton qui affiche la première forme enregistrer
+        /// </summary>
         private ICommand _AfficherFormeA;
         public ICommand AfficherFormeA
         {
@@ -118,8 +157,13 @@ namespace Jeu_de_la_vie.VueModel
         }
         private void AfficherFormeA_Execute(object sender)
         {
+            //Vide la grille actuelle
             grille.viderGrille();
+
+            //Demande une nouvelle grille avec des cellules vivante aléatoire
             grille.randomForm();
+
+            //Met à jour la liste de cellule afficher
             ListeCellule = grille.cellules;
         }
         private bool AfficherFormeA_CanExecute(object parameter)
@@ -170,6 +214,7 @@ namespace Jeu_de_la_vie.VueModel
         }
         private async void EnregistrerForme_Execute(object sender)
         {
+            //Ouvre la fênetre à remplir
             SaveFileDialog open = new SaveFileDialog();
             open.Title = "Save File";
             open.ShowDialog();
@@ -177,10 +222,12 @@ namespace Jeu_de_la_vie.VueModel
             open.CheckFileExists = true;
             open.CheckPathExists = true;
             open.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+
+            //Si le nom et emplacement choisi
             if (open.FileName != "")
             {
+                //Enregistre la grille dans le fichier
                 gererFichierTexte.Enregistrer(grille, open.FileName);
-                ListeCellule = grille.cellules;
             }
         }
         private bool EnregistrerForme_CanExecute(object parameter)
@@ -189,6 +236,9 @@ namespace Jeu_de_la_vie.VueModel
         }
         #endregion
         #region Demarrer
+        /// <summary>
+        /// Bouton pour démarrer le jeu
+        /// </summary>
         private ICommand _Demarrer;
         public ICommand Demarrer
         {
@@ -197,27 +247,52 @@ namespace Jeu_de_la_vie.VueModel
         }
         private async void Demarrer_Execute(object sender)
         {
+            //Vérifie si itération infinie
             if(NombreIteration != -1)
             {
+                //itére pour le nombre de fois demander
                 for (int i = 0; i < NombreIteration; i++)
                 {
+                    //Grille actuelle
                     iteration.Grille = grille;
+
+                    //Vérifie grille
                     grille.VérifierCellulesVivantes();
+
+                    //Fait une itération
                     iteration.FaireIteration();
+
+                    //actualise l'object grille
                     grille = iteration.Grille;
+
+                    //actualise la liste de cellule affichier
                     ListeCellule = grille.cellules;
+
+                    //Affiche la grille pendant 0.1 seconde
                     await Task.Delay(100);
                 }
             }
             else
             {
+                //Itére à l'infini
                 for (;;)
                 {
+                    //Grille actuelle
                     iteration.Grille = grille;
+
+                    //Vérifie grille
                     grille.VérifierCellulesVivantes();
+
+                    //Fait une itération
                     iteration.FaireIteration();
+
+                    //actualise l'object grille
                     grille = iteration.Grille;
+
+                    //actualise la liste de cellule affichier
                     ListeCellule = grille.cellules;
+
+                    //Affiche la grille pendant 0.1 seconde
                     await Task.Delay(100);
                 }
             }
@@ -229,9 +304,20 @@ namespace Jeu_de_la_vie.VueModel
         #endregion
 
 
+        /// <summary>
+        /// Constructeur de la VM Jeu
+        /// </summary>
         public JeuVM()
         {
-            iteration = new Iteration(grille);
+            //Initie les objets 
+            grille = new Grille(20);
+            iteration = new Iteration(grille); //Cree l'objet itération avec le tableau vide
+            ListeCellule = new List<Cellule>();
+            ListeCellule = grille.cellules; //Liste des cellules à affichier
+            gererFichierTexte = new GererFichierTexte();
+
+
+            //Crée les boutons
             this.AfficherFormeP = new CommandeRelais(AfficherFormeP_Execute, AfficherFormeP_CanExecute);
             this.AfficherFormeD = new CommandeRelais(AfficherFormeD_Execute, AfficherFormeD_CanExecute);
             this.AfficherFormeT = new CommandeRelais(AfficherFormeT_Execute, AfficherFormeT_CanExecute);
@@ -239,13 +325,6 @@ namespace Jeu_de_la_vie.VueModel
             this.Demarrer = new CommandeRelais(Demarrer_Execute, Demarrer_CanExecute);
             this.ChargerForme = new CommandeRelais(ChargerForme_Execute, ChargerForme_CanExecute);
             this.EnregistrerForme = new CommandeRelais(EnregistrerForme_Execute, EnregistrerForme_CanExecute);
-
-            ListeCellule = new List<Cellule>();
-            ListeCellule = grille.cellules;
-            //ListeCellule.Add(new Cellule(new Position(0, 0), true));
-            //ListeCellule.Add(new Cellule(new Position(0,1), false));
-            //ListeCellule.Add(new Cellule(new Position(1, 0), true));
-            gererFichierTexte = new GererFichierTexte();
 
             
         }

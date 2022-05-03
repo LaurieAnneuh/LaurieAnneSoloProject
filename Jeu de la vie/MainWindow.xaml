@@ -12,24 +12,30 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <!--#region Affichage de la grille -->
         <StackPanel Grid.Column="0">
+            <!-- Contour de la grille -->
             <Border Width="404" Height="404">
+                <!-- La grille-->
                 <ItemsControl ItemsSource="{Binding ListeCellule}" BorderThickness="1" BorderBrush="Black">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas Background="Transparent"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
+                    <!--La position des cellules -->
                     <ItemsControl.ItemContainerStyle>
                         <Style TargetType="ContentPresenter">
                             <Setter Property="Canvas.Left" Value="{Binding Position.XRelatif}"/>
                             <Setter Property="Canvas.Top" Value="{Binding Position.YRelatif}"/>
                         </Style>
                     </ItemsControl.ItemContainerStyle>
+                    <!-- Le forme des cellules-->
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="Gray" BorderThickness="1">
                                 <Rectangle Width="20" Height="20" Fill="{Binding Couleur}" StrokeThickness="1">
+                                    <!-- Ajout du "Bouton" dans les cellules-->
                                     <behaviours:Interaction.Triggers>
                                         <behaviours:EventTrigger EventName="MouseDown">
                                             <behaviours:InvokeCommandAction Command="{Binding Selectionner}" PassEventArgsToCommand="True"/>
@@ -42,25 +48,31 @@
                 </ItemsControl>
             </Border>
         </StackPanel>
+        <!--#endregion-->
+        <!--#region Controles -->
         <StackPanel Grid.Column="1">
             <GroupBox Header="Configuration" Margin="5">
                 <StackPanel>
+                    <!--Bouton pour faire afficher les formes dans la grille -->
                     <Label Margin="5">Générer une forme:</Label>
                     <Button Margin="5" Command="{Binding AfficherFormeP}">Forme 1</Button>
                     <Button Margin="5" Command="{Binding AfficherFormeD}">Forme 2</Button>
                     <Button Margin="5" Command="{Binding AfficherFormeT}">Forme 3</Button>
                     <Button Margin="5" Command="{Binding AfficherFormeA}">Aléatoire</Button>
-
+                    <!-- Bouton pour utiliser les fichiers externe par l'utilisateur-->
                     <Label>Charger une forme</Label>
                     <Button Margin="5" Command="{Binding ChargerForme}">Charger</Button>
                     <Label>Enregistrer une nouvelle forme</Label>
                     <Button Margin="5" Command="{Binding EnregistrerForme}">Enregistrer</Button>
                 </StackPanel>
             </GroupBox>
+            <!--Section pour démarrer le jeu-->
+            <!--L'entrer du nombre d'itération  -->
+            <!--Infini = -1 -->
             <Label>Nombre Itération</Label>
             <TextBox Margin="5" Text="{Binding NombreIteration, Mode=TwoWay}"></TextBox>
             <Button Margin="5" Command="{Binding Demarrer}">Démarrer</Button>
         </StackPanel>
-
+        <!--#endregion-->
     </Grid>
 </Window>
