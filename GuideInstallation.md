@@ -1,6 +1,6 @@
 # LaurieAnneSoloProject
 
-## Guide d'utilisation
+## Guide d'installation
 
 ### Introduction 
 
