@@ -1,8 +1,10 @@
 # LaurieAnneSoloProject
 
-## [Guide d'Utilisation](https://github.com/kwidz/LaurieAnneSoloProject/blob/main/README.md#guide-dutilisation-1)
+## Lien vers les informations
 
-## [Guide d'Installation](https://github.com/kwidz/LaurieAnneSoloProject/blob/main/README.md#guide-dinstallation-1)
+### [Guide d'Utilisation](https://github.com/kwidz/LaurieAnneSoloProject/blob/main/README.md#guide-dutilisation-1)
+
+### [Guide d'Installation](https://github.com/kwidz/LaurieAnneSoloProject/blob/main/README.md#guide-dinstallation-1)
 
 
 ## Guide d'installation
