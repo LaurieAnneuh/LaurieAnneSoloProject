@@ -186,7 +186,7 @@ La présente procédure d'utilisation suppose que :
   
 #### Démarrer itération
 
-1- Entrer le nombre d'itération voulu dans la case itération
+1- Entrer le nombre d'itération voulu dans la case itération, pour l'infini entrer -1
 
 ![image](https://github.com/kwidz/LaurieAnneSoloProject/blob/main/What/Photo/Iteration.PNG)
 
