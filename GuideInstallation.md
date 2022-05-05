@@ -19,6 +19,7 @@ La présente procédure d'installation suppose que :
 #### Téléchargement
 
   1- Cliquer sur le lien https://github.com/kwidz/LaurieAnneSoloProject/releases/tag/Final
+     
      Cela vous redirige vers la page de la dernière release 
       
   2- Dans Asset, cliquer sur l'option Source code pour lancer le téléchargement 
