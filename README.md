@@ -2,7 +2,7 @@
 
 ## [Guide d'Installation](https://github.com/kwidz/LaurieAnneSoloProject/blob/main/GuideInstallation.md)
 
-## [Guide d'Utilisation](https://github.com/kwidz/LaurieAnneSoloProject/blob/main/GuideUtilisation.md)
+## [Guide d'Utilisation](https://github.com/kwidz/LaurieAnneSoloProject/blob/main/README.md#guide-dinstallation-1)
 
 
 ## Guide d'installation
